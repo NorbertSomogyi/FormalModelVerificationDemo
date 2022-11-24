@@ -1,0 +1,61 @@
+MODULE main
+VAR
+	state : { s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s1Inheritance, s2Inheritance, s4Attributes, s5Attributes, s10Attributes, s10Instantiation, s11Instantiation, s11Value};
+ASSIGN
+	init(state) := s0;
+	next(state) := 
+		case
+			state = s0 : {s1, s2, s10};
+			state = s1 : {s1Inheritance};
+			state = s2 : {s2Inheritance};
+			state = s3 : {s3};
+			state = s4 : {s4Attributes};
+			state = s5 : {s5Attributes};
+			state = s6 : {s6};
+			state = s7 : {s7};
+			state = s8 : {s8};
+			state = s9 : {s9};
+			state = s10 : {s10Attributes, s10Instantiation};
+			state = s11 : {s11Instantiation, s11Value};
+			state = s12 : {s12};
+			state = s1Inheritance : {s4};
+			state = s2Inheritance : {s4};
+			state = s4Attributes : {s6};
+			state = s5Attributes : {s7, s8};
+			state = s10Attributes : {s11};
+			state = s10Instantiation : {s3};
+			state = s11Instantiation : {s9};
+			state = s11Value : {s12};
+		esac;
+DEFINE
+	InitialState := state = s0;
+	FactoryA := state = s1;
+	FactoryB := state = s2;
+	SpecialDevice := state = s3;
+	Factory := state = s4;
+	Device := state = s5;
+	Factory.location := state = s6;
+	Device.imei := state = s7;
+	Device.capacity := state = s8;
+	SpecialDevice.modifier := state = s9;
+	Device01 := state = s10;
+	Device01.modifier := state = s11;
+	Zero := state = s12;
+	Inheritance := state = s1Inheritance | state = s2Inheritance;
+	Attributes := state = s4Attributes | state = s5Attributes | state = s10Attributes;
+	Instantiation := state = s10Instantiation | state = s11Instantiation;
+	Value := state = s11Value;
+SPEC
+AG (Attributes -> !EX EX Attributes);
+SPEC
+AG ((EX (Instantiation & EX SpecialDevice.modifier)) -> !EX(Value & EX Zero));
+SPEC
+AG (FactoryA -> !EX(Inheritance & E[(!Instantiation & !Attributes & !Value) U FactoryA]));
+SPEC
+AG (FactoryB -> !EX(Inheritance & E[(!Instantiation & !Attributes & !Value) U FactoryB]));
+SPEC
+AG (Factory -> !EX(Inheritance & E[(!Instantiation & !Attributes & !Value) U Factory]));
+SPEC
+AG (Device -> !EX(Inheritance & E[(!Instantiation & !Attributes & !Value) U Device]));
+SPEC
+AG (SpecialDevice -> !EX(Inheritance & E[(!Instantiation & !Attributes & !Value) U SpecialDevice]));
