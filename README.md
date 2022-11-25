@@ -4,9 +4,8 @@ A simple demo kotlin application created in Intellij, that generates a NuSMV scr
 
 To execute the verification of the generated file verify.smv, download NuSMV for the appropriate platform here: https://nusmv.fbk.eu/
 
-From the root folder of NuSMV, navigate to the folder 'bin', then run NuSMV like this:
-     NuSMV <path_to_smv_file>
-Or copy the generated verify.smv file into the bin folder, and run it locally:
+From the root folder of NuSMV, navigate to the folder 'bin', copy the generated verify.smv file into the bin folder, and run it locally:
+
      NuSMV verify.smv
      
 Verification should finish in an instant, and log the results to the console. All specifications should be true, except for the one checking the value of SpecialDevice.modifier, since the example was constructed for this to be false. A counterexample should also be printed to the console, showing the path InitialState -> Device01 -> Attributes -> Device01.modifier -> Instantiation -> SpecialDevice.modifier as violating the formula.
